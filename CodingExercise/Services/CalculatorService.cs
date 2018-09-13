@@ -27,7 +27,8 @@ namespace CodingExercise.Services
             calculatorStore = new SimpleCalculatorStore();
             numberValidators = new List<INumberValidator>()
             {
-                new NoNegativesNumberValidator()
+                new NoNegativesNumberValidator(),
+                new OnlySmallNumbersNumberValidator()
             };
         }
 

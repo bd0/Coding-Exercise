@@ -111,5 +111,18 @@ namespace CodingExercise.Tests
             Assert.AreEqual(expectedMessage, exception.Message);
         }
 
+
+        // STEP-6 Silently ignore numbers bigger than 1000.
+        [DataTestMethod]
+        [DataRow("1,2,3,4,5000", 10)]
+        [DataRow("0,1,2,1000,1001", 1003)]
+        [DataRow("1001,10001,100001", 0)]
+        public void ShouldExcludeNumbersBiggerThan1000(string numbers, int expectedSum)
+        {
+            var result = calculatorService.Add(numbers);
+
+            Assert.AreEqual(expectedSum, result);
+        }
+
     }
 }
