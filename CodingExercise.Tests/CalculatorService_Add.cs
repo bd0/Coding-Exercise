@@ -42,5 +42,18 @@ namespace CodingExercise.Tests
             Assert.AreEqual(7, result);
         }
 
+
+        // STEP-2 Support any amount of numbers in input.
+        [DataTestMethod]
+        [DataRow("1,2,3", 6)]
+        [DataRow("10,20,30,40,50,60", 210)]
+        [DataRow("0,1,1,2,3,5,8,13,21,34,55,89,144", 376)]
+        public void ShouldReturnTheSumOfAnyAmountOfNumbers(string numbers, int expectedSum)
+        {
+            var result = calculatorService.Add(numbers);
+
+            Assert.AreEqual(expectedSum, result);
+        }
+
     }
 }
