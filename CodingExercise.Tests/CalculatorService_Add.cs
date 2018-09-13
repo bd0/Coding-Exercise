@@ -1,5 +1,6 @@
 using CodingExercise.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace CodingExercise.Tests
 {
@@ -92,6 +93,22 @@ namespace CodingExercise.Tests
             var result = calculatorService.Add(numbers);
 
             Assert.AreEqual(expectedSum, result);
+        }
+
+
+        // STEP-5 Validate numbers and throw an exception if negative numbers are provided.
+        [DataTestMethod]
+        [DataRow("-1,2,3,4,5", "Negatives not allowed: -1\r\nParameter name: numbers")]
+        [DataRow("0,1,-1,-2,-3,5,8", "Negatives not allowed: -1, -2, -3\r\nParameter name: numbers")]
+        [DataRow("-8,-10,-12", "Negatives not allowed: -8, -10, -12\r\nParameter name: numbers")]
+        public void ShouldThrowExceptionForNegativeNumbers(string numbers, string expectedMessage)
+        {
+            var exception = Assert.ThrowsException<ArgumentException>(() =>
+            {
+                calculatorService.Add(numbers);
+            });
+
+            Assert.AreEqual(expectedMessage, exception.Message);
         }
 
     }
