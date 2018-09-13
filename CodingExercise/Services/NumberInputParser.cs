@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CodingExercise.Services
 {
@@ -11,6 +12,9 @@ namespace CodingExercise.Services
     /// </summary>
     public class NumberInputParser : INumberInputParser
     {
+        readonly Regex delimiterCheck = new Regex(@"^//(?<delimiter>.)\n(?<numbers>.*)", RegexOptions.Singleline);
+
+
         /// <summary>
         /// Takes a string representation of a list of numbers and returns
         /// a parsed list of integers.
@@ -22,8 +26,28 @@ namespace CodingExercise.Services
             // If no input provided, return an empty enumerable.
             if (input == null) { return Enumerable.Empty<int>(); }
 
-            // STEP-3 Add support for new line delimiters.
-            var delimiters = new char[] { ',', '\n' };
+            char[] delimiters;
+
+            // STEP-4 Add support for custom delimiters.
+            var delimiterResult = delimiterCheck.Match(input);
+
+            if (delimiterResult.Success)
+            {
+                // If we found a delimiter character specified, use that instead of the default delimiters.
+                var delimiterChar = delimiterResult.Groups["delimiter"].Value[0];
+
+                delimiters = new char[] { delimiterChar };
+
+                // Only consider the input after the delimiter specification when parsing numbers.
+                input = delimiterResult.Groups["numbers"].Value ?? string.Empty;
+            }
+            else
+            {
+                // STEP-3 Add support for new line delimiters.
+                // Default to ',' and '\n'.
+                delimiters = new char[] { ',', '\n' };
+            }
+
 
             var temp = 0;
 

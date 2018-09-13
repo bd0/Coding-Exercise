@@ -68,5 +68,31 @@ namespace CodingExercise.Tests
             Assert.AreEqual(expectedSum, result);
         }
 
+
+        // STEP-4 Add support for custom delimiter character.
+        [DataTestMethod]
+        [DataRow("//;\n1;2;3", 6)]
+        [DataRow("//*\n10*20*30*40*50*60", 210)]
+        [DataRow("//#\n1#5#9#\n", 15)]
+        public void ShouldSupportCustomDelimiterBetweenNumbers(string numbers, int expectedSum)
+        {
+            var result = calculatorService.Add(numbers);
+
+            Assert.AreEqual(expectedSum, result);
+        }
+
+
+        // STEP-4 Add support for custom delimiter character.
+        [DataTestMethod]
+        [DataRow("//;\n1,200;2,400;200;300;500", 1000)]
+        [DataRow("//;\n10;20\n30;40\n50;60", 70)]
+        [DataRow("//;\n1\n5\n9\n", 0)]
+        public void ShouldNotSplitOnCommaOrNewLineWhenCustomDelimiterSpecified(string numbers, int expectedSum)
+        {
+            var result = calculatorService.Add(numbers);
+
+            Assert.AreEqual(expectedSum, result);
+        }
+
     }
 }

@@ -71,5 +71,45 @@ namespace CodingExercise.Tests
             CollectionAssert.AreEqual(expectedCollection, result.ToArray());
         }
 
+
+        // STEP-4 Add support for custom delimiter character.
+        [DataTestMethod]
+        [DataRow("//;\n1;2;3", new[] { 1, 2, 3 })]
+        [DataRow("//*\n10*20*30*40*50*60", new[] { 10, 20, 30, 40, 50, 60 })]
+        [DataRow("//#\n1#5#9#\n", new[] { 1, 5, 9 })]
+        public void ShouldSupportCustomDelimiterBetweenNumbers(string input, int[] expectedCollection)
+        {
+            var result = numberInputParser.ParseNumberInput(input);
+
+            CollectionAssert.AreEqual(expectedCollection, result.ToArray());
+        }
+
+
+        // STEP-4 Add support for custom delimiter character.
+        [DataTestMethod]
+        [DataRow("//;\n1,200;2,400;200;300;500", new[] { 200,300, 500 })]
+        [DataRow("//;\n10;20\n30;40\n50;60", new[] { 10, 60 })]
+        [DataRow("//;\n1\n5\n9\n", new int[] { })]
+        [DataRow("///\n1/5/9", new int[] { 1, 5, 9 })]
+        public void ShouldNotSplitOnCommaOrNewLineWhenCustomDelimiterSpecified(string input, int[] expectedCollection)
+        {
+            var result = numberInputParser.ParseNumberInput(input);
+
+            CollectionAssert.AreEqual(expectedCollection, result.ToArray());
+        }
+
+
+        // STEP-4 Add support for custom delimiter character.
+        [DataTestMethod]
+        [DataRow("/;\n1,2,3", new[] { 1, 2, 3 })]
+        [DataRow("//\n10,20,30,40,50,60", new[] { 10, 20, 30, 40, 50, 60 })]
+        [DataRow("//;1,5,9,\n", new[] { 5, 9 })] // 1 is lost in this case because it becomes "//;1".
+        public void ShouldStillWorkWithInvalidDelimiterSpecification(string input, int[] expectedCollection)
+        {
+            var result = numberInputParser.ParseNumberInput(input);
+
+            CollectionAssert.AreEqual(expectedCollection, result.ToArray());
+        }
+
     }
 }
