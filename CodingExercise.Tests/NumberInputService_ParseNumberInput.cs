@@ -58,5 +58,18 @@ namespace CodingExercise.Tests
             CollectionAssert.AreEqual(expectedCollection, result.ToArray());
         }
 
+
+        // STEP-3 Add support for new line delimiters.
+        [DataTestMethod]
+        [DataRow("1\n2,3", new[] { 1, 2, 3 })]
+        [DataRow("10\n20\n30\n40\n50\n60", new[] { 10, 20, 30, 40, 50, 60 })]
+        [DataRow("1,\n", new[] { 1 })]
+        public void ShouldHandleNewLinesBetweenNumbers(string input, int[] expectedCollection)
+        {
+            var result = numberInputParser.ParseNumberInput(input);
+
+            CollectionAssert.AreEqual(expectedCollection, result.ToArray());
+        }
+
     }
 }

@@ -22,10 +22,13 @@ namespace CodingExercise.Services
             // If no input provided, return an empty enumerable.
             if (input == null) { return Enumerable.Empty<int>(); }
 
-            int temp = 0;
+            // STEP-3 Add support for new line delimiters.
+            var delimiters = new char[] { ',', '\n' };
+
+            var temp = 0;
 
             // Split the input string by the delimiter and parse into individual integers.
-            var numbers = (from number in input.Split(',', StringSplitOptions.RemoveEmptyEntries)
+            var numbers = (from number in input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries)
                            where int.TryParse(number, out temp)
                            select temp).ToList();
 

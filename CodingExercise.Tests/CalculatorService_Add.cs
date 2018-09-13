@@ -55,5 +55,18 @@ namespace CodingExercise.Tests
             Assert.AreEqual(expectedSum, result);
         }
 
+
+        // STEP-3 Add support for new line delimiters.
+        [DataTestMethod]
+        [DataRow("1\n2,3", 6)]
+        [DataRow("10\n20\n30\n40\n50\n60", 210)]
+        [DataRow("1,\n", 1)]
+        public void ShouldHandleNewLinesBetweenNumbers(string numbers, int expectedSum)
+        {
+            var result = calculatorService.Add(numbers);
+
+            Assert.AreEqual(expectedSum, result);
+        }
+
     }
 }
