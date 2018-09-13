@@ -137,13 +137,26 @@ namespace CodingExercise.Tests
             Assert.AreEqual(expectedSum, result);
         }
 
-        
-        // STEP-8 Add support for multiple characters as delimiters.
+
+        // STEP-8 Add support for multiple delimiters.
         [DataTestMethod]
         [DataRow("//[;][@]\n1;2;3@4@5", 15)]
         [DataRow("//[*][%]\n10*20*30*40*50*60", 210)]
         [DataRow("//[+][-][*][/]\n1+5-9*5/3+4", 27)]
         public void ShouldSupportMultiple1CharDelimitersWithBrackets(string numbers, int expectedSum)
+        {
+            var result = calculatorService.Add(numbers);
+
+            Assert.AreEqual(expectedSum, result);
+        }
+
+
+        // STEP-9 Add support for multiple delimiters longer than 1 character.
+        [DataTestMethod]
+        [DataRow("//[;;][@@]\n1;;2;;3@@4@@5", 15)]
+        [DataRow("//[**][%%]\n10**20**30**40**50**60", 210)]
+        [DataRow("//[+][--][***][////]\n1+5--9***5////3+4", 27)]
+        public void ShouldSupportMultipleDelimitersOfAnyLength(string numbers, int expectedSum)
         {
             var result = calculatorService.Add(numbers);
 
