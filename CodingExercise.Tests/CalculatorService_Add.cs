@@ -124,5 +124,18 @@ namespace CodingExercise.Tests
             Assert.AreEqual(expectedSum, result);
         }
 
+
+        // STEP-7 Add support for delimiters to optionally be longer than 1 character.
+        [DataTestMethod]
+        [DataRow("//[;]\n1;2;3", 6)]
+        [DataRow("//[**]\n10**20**30**40**50**60", 210)]
+        [DataRow("//[###]\n1###5###9###\n", 15)]
+        public void ShouldSupportCustomDelimiterLongerThan1Character(string numbers, int expectedSum)
+        {
+            var result = calculatorService.Add(numbers);
+
+            Assert.AreEqual(expectedSum, result);
+        }
+
     }
 }

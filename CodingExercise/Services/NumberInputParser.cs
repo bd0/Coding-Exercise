@@ -12,7 +12,14 @@ namespace CodingExercise.Services
     /// </summary>
     public class NumberInputParser : INumberInputParser
     {
-        readonly Regex delimiterCheck = new Regex(@"^//(?<delimiter>.)\n(?<numbers>.*)", RegexOptions.Singleline);
+        /// <summary>
+        /// A Regex for checking for custom delimiters.
+        /// Per STEP-4 STEP-7: Should support custom delimiters of any length.
+        /// Delimiter format should be one of:
+        /// "//*\n..." (single char delimiter)
+        /// "//[**]\n..." (multi char delimiter)
+        /// </summary>
+        readonly Regex delimiterCheck = new Regex(@"^//(\[(?<delimiter>.+)\]|(?<delimiter>.))\n(?<numbers>.*)", RegexOptions.Singleline);
 
 
         /// <summary>
@@ -26,7 +33,7 @@ namespace CodingExercise.Services
             // If no input provided, return an empty enumerable.
             if (input == null) { return Enumerable.Empty<int>(); }
 
-            char[] delimiters;
+            string[] delimiters;
 
             // STEP-4 Add support for custom delimiters.
             var delimiterResult = delimiterCheck.Match(input);
@@ -34,9 +41,9 @@ namespace CodingExercise.Services
             if (delimiterResult.Success)
             {
                 // If we found a delimiter character specified, use that instead of the default delimiters.
-                var delimiterChar = delimiterResult.Groups["delimiter"].Value[0];
+                var delimiter = delimiterResult.Groups["delimiter"].Value;
 
-                delimiters = new char[] { delimiterChar };
+                delimiters = new string[] { delimiter };
 
                 // Only consider the input after the delimiter specification when parsing numbers.
                 input = delimiterResult.Groups["numbers"].Value ?? string.Empty;
@@ -45,7 +52,7 @@ namespace CodingExercise.Services
             {
                 // STEP-3 Add support for new line delimiters.
                 // Default to ',' and '\n'.
-                delimiters = new char[] { ',', '\n' };
+                delimiters = new string[] { ",", "\n" };
             }
 
 
