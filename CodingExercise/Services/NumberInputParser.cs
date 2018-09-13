@@ -15,11 +15,22 @@ namespace CodingExercise.Services
         /// <summary>
         /// A Regex for checking for custom delimiters.
         /// Per STEP-4 STEP-7: Should support custom delimiters of any length.
+        /// Per STEP-8: Should support multiple delimiters.
         /// Delimiter format should be one of:
         /// "//*\n..." (single char delimiter)
         /// "//[**]\n..." (multi char delimiter)
+        /// "//[*][@@][...]\n..." (more than one delimiter)
         /// </summary>
-        readonly Regex delimiterCheck = new Regex(@"^//(\[(?<delimiter>.+)\]|(?<delimiter>.))\n(?<numbers>.*)", RegexOptions.Singleline);
+        readonly Regex delimiterCheck = new Regex(@"
+            ^//
+            (
+            # Support multiple delimiters defined by [ ].
+            (\[(?<delimiter>.+?)\])+
+            # Or a single, 1-char delimiter without brackets.
+            |(?<delimiter>.)
+            )
+            \n(?<numbers>.*)",
+            RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture);
 
 
         /// <summary>
@@ -41,9 +52,10 @@ namespace CodingExercise.Services
             if (delimiterResult.Success)
             {
                 // If we found a delimiter character specified, use that instead of the default delimiters.
-                var delimiter = delimiterResult.Groups["delimiter"].Value;
+                var delimiterGroup = delimiterResult.Groups["delimiter"];
 
-                delimiters = new string[] { delimiter };
+                // Each specified delimiter will be captured in this group.
+                delimiters = delimiterGroup.Captures.Select(capture => capture.Value).ToArray();
 
                 // Only consider the input after the delimiter specification when parsing numbers.
                 input = delimiterResult.Groups["numbers"].Value ?? string.Empty;

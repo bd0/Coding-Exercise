@@ -137,5 +137,18 @@ namespace CodingExercise.Tests
             CollectionAssert.AreEqual(expectedCollection, result.ToArray());
         }
 
+
+        // STEP-8 Add support for multiple characters as delimiters.
+        [DataTestMethod]
+        [DataRow("//[;][@]\n1;2;3@4@5", new[] { 1, 2, 3, 4, 5 })]
+        [DataRow("//[*][%]\n10*20*30*40*50*60", new[] { 10, 20, 30, 40, 50, 60 })]
+        [DataRow("//[+][-][*][/]\n1+5-9*5/3+4", new[] { 1, 5, 9, 5, 3, 4 })]
+        public void ShouldSupportMultiple1CharDelimitersWithBrackets(string input, int[] expectedCollection)
+        {
+            var result = numberInputParser.ParseNumberInput(input);
+
+            CollectionAssert.AreEqual(expectedCollection, result.ToArray());
+        }
+
     }
 }
