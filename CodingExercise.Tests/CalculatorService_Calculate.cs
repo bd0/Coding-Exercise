@@ -1,3 +1,4 @@
+using CodingExercise.Enums;
 using CodingExercise.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -5,13 +6,13 @@ using System;
 namespace CodingExercise.Tests
 {
     [TestClass]
-    public class CalculatorService_Add
+    public class CalculatorService_Calculate
     {
 
         readonly CalculatorService calculatorService;
 
 
-        public CalculatorService_Add()
+        public CalculatorService_Calculate()
         {
             calculatorService = new CalculatorService();
         }
@@ -20,7 +21,7 @@ namespace CodingExercise.Tests
         [TestMethod]
         public void ShouldReturn0ForEmptyInput()
         {
-            var result = calculatorService.Add(string.Empty);
+            var result = calculatorService.Calculate(string.Empty);
 
             Assert.AreEqual(0, result);
         }
@@ -29,7 +30,7 @@ namespace CodingExercise.Tests
         [TestMethod]
         public void ShouldReturnTheSameNumberWhenASingleDigitProvided()
         {
-            var result = calculatorService.Add("3");
+            var result = calculatorService.Calculate("3");
 
             Assert.AreEqual(3, result);
         }
@@ -38,7 +39,7 @@ namespace CodingExercise.Tests
         [TestMethod]
         public void ShouldReturnTheSumOfTwoNumbers()
         {
-            var result = calculatorService.Add("2,5");
+            var result = calculatorService.Calculate("2,5");
 
             Assert.AreEqual(7, result);
         }
@@ -51,7 +52,7 @@ namespace CodingExercise.Tests
         [DataRow("0,1,1,2,3,5,8,13,21,34,55,89,144", 376)]
         public void ShouldReturnTheSumOfAnyAmountOfNumbers(string numbers, int expectedSum)
         {
-            var result = calculatorService.Add(numbers);
+            var result = calculatorService.Calculate(numbers);
 
             Assert.AreEqual(expectedSum, result);
         }
@@ -64,7 +65,7 @@ namespace CodingExercise.Tests
         [DataRow("1,\n", 1)]
         public void ShouldHandleNewLinesBetweenNumbers(string numbers, int expectedSum)
         {
-            var result = calculatorService.Add(numbers);
+            var result = calculatorService.Calculate(numbers);
 
             Assert.AreEqual(expectedSum, result);
         }
@@ -77,7 +78,7 @@ namespace CodingExercise.Tests
         [DataRow("//#\n1#5#9#\n", 15)]
         public void ShouldSupportCustomDelimiterBetweenNumbers(string numbers, int expectedSum)
         {
-            var result = calculatorService.Add(numbers);
+            var result = calculatorService.Calculate(numbers);
 
             Assert.AreEqual(expectedSum, result);
         }
@@ -90,7 +91,7 @@ namespace CodingExercise.Tests
         [DataRow("//;\n1\n5\n9\n", 0)]
         public void ShouldNotSplitOnCommaOrNewLineWhenCustomDelimiterSpecified(string numbers, int expectedSum)
         {
-            var result = calculatorService.Add(numbers);
+            var result = calculatorService.Calculate(numbers);
 
             Assert.AreEqual(expectedSum, result);
         }
@@ -105,7 +106,7 @@ namespace CodingExercise.Tests
         {
             var exception = Assert.ThrowsException<ArgumentException>(() =>
             {
-                calculatorService.Add(numbers);
+                calculatorService.Calculate(numbers);
             });
 
             Assert.AreEqual(expectedMessage, exception.Message);
@@ -119,7 +120,7 @@ namespace CodingExercise.Tests
         [DataRow("1001,10001,100001", 0)]
         public void ShouldExcludeNumbersBiggerThan1000(string numbers, int expectedSum)
         {
-            var result = calculatorService.Add(numbers);
+            var result = calculatorService.Calculate(numbers);
 
             Assert.AreEqual(expectedSum, result);
         }
@@ -132,7 +133,7 @@ namespace CodingExercise.Tests
         [DataRow("//[###]\n1###5###9###\n", 15)]
         public void ShouldSupportCustomDelimiterLongerThan1Character(string numbers, int expectedSum)
         {
-            var result = calculatorService.Add(numbers);
+            var result = calculatorService.Calculate(numbers);
 
             Assert.AreEqual(expectedSum, result);
         }
@@ -145,7 +146,7 @@ namespace CodingExercise.Tests
         [DataRow("//[+][-][*][/]\n1+5-9*5/3+4", 27)]
         public void ShouldSupportMultiple1CharDelimitersWithBrackets(string numbers, int expectedSum)
         {
-            var result = calculatorService.Add(numbers);
+            var result = calculatorService.Calculate(numbers);
 
             Assert.AreEqual(expectedSum, result);
         }
@@ -158,9 +159,38 @@ namespace CodingExercise.Tests
         [DataRow("//[+][--][***][////]\n1+5--9***5////3+4", 27)]
         public void ShouldSupportMultipleDelimitersOfAnyLength(string numbers, int expectedSum)
         {
-            var result = calculatorService.Add(numbers);
+            var result = calculatorService.Calculate(numbers);
 
             Assert.AreEqual(expectedSum, result);
+        }
+
+
+
+        [TestMethod]
+        public void ShouldDefaultToAddition()
+        {
+            var result = calculatorService.Calculate("2,1");
+
+            // Confirm that addition is being performed as it is 
+            // the only operation that will result in an answer of 3.
+            Assert.AreEqual(3, result);
+        }
+
+
+        [DataTestMethod]
+        [DataRow(CalculatorOperation.Addition, "10,2", 12)]
+        [DataRow(CalculatorOperation.Subtraction, "10,2", 8)]
+        [DataRow(CalculatorOperation.Multiplication, "10,2", 20)]
+        [DataRow(CalculatorOperation.Division, "10,2", 5)]
+        [DataRow(CalculatorOperation.Addition, "100,10,2", 112)]
+        [DataRow(CalculatorOperation.Subtraction, "100,10,2", 88)]
+        [DataRow(CalculatorOperation.Multiplication, "100,10,2", 2000)]
+        [DataRow(CalculatorOperation.Division, "100,10,2", 5)]
+        public void ShouldAffectTheResultOfTheCalculateMethod(CalculatorOperation operation, string input, int expectedResult)
+        {
+            var result = calculatorService.Calculate(input, operation);
+
+            Assert.AreEqual(expectedResult, result);
         }
 
     }

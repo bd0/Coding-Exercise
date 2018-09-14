@@ -1,4 +1,5 @@
-﻿using CodingExercise.Services.Validation;
+﻿using CodingExercise.Enums;
+using CodingExercise.Services.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,27 +35,29 @@ namespace CodingExercise.Services
 
 
         /// <summary>
-        /// Parses the text representation of a series of numbers and returns the sum.
+        /// Parses the text representation of a series of numbers and 
+        /// returns the result of the specified calculation.
         /// </summary>
-        /// <param name="numbers"></param>
+        /// <param name="numbers">A list of numbers to use for the calculation.</param>
+        /// <param name="operation">The operation to perform. Defaults to Addition.</param>
         /// <returns></returns>
-        public int Add(string numbers)
+        public int Calculate(string numbers, CalculatorOperation operation = CalculatorOperation.Addition)
         {
             // Parse the input string to get the list of integers.
-            var numbersToAdd = numberInputParser.ParseNumberInput(numbers);
+            var numbersToCalculate = numberInputParser.ParseNumberInput(numbers);
 
             // Prior to performing the calculation, validate that these numbers are acceptable.
             foreach(var validator in numberValidators)
             {
                 // The validator will either filter the list to only acceptable numbers,
                 // or throw an exception for truly egregious ones.
-                numbersToAdd = validator.GetValidNumbers(numbersToAdd);
+                numbersToCalculate = validator.GetValidNumbers(numbersToCalculate);
             }
 
             // Add each integer to the calculator store.
-            foreach(var number in numbersToAdd)
+            foreach(var number in numbersToCalculate)
             {
-                calculatorStore.CommitNumber(number);
+                calculatorStore.CommitNumber(number, operation);
             }
 
             // Get the final result of the operation.
