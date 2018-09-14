@@ -3,13 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodingExercise.Services
+namespace CodingExercise.Services.Calculators
 {
     /// <summary>
-    /// Interface used by ICalculatorService to store the current state of the calculation.
+    /// Interface used by ICalculatorService to manage the calculator state 
+    /// and process calculations.
     /// </summary>
-    public interface ICalculatorStore
+    public interface ICalculator
     {
+        /// <summary>
+        /// Clears the current state of the calculator store, 
+        /// effectively beginning a new calculation.
+        /// </summary>
+        void Clear();
+
         /// <summary>
         /// Commits a number to the store.
         /// </summary>

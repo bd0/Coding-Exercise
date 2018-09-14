@@ -1,5 +1,6 @@
 ﻿using CodingExercise.Enums;
 using CodingExercise.Services;
+using CodingExercise.Services.Calculators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace CodingExercise.Tests
     {
 
 
-        private ICalculatorStore NewCalculatorStore() => new SimpleCalculatorStore();
+        private ICalculator NewCalculatorStore() => new SimpleCalculator();
 
 
         [TestMethod]

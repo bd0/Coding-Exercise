@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodingExercise.Services
+namespace CodingExercise.Services.Calculators
 {
     /// <summary>
-    /// Maintains the current state of the calculation by 
-    /// keeping a running value based on the numbers provided so far.
+    /// Maintains the current state of the calculation as a 
+    /// single value, and applies number operations as they
+    /// are given.
     /// </summary>
-    public class SimpleCalculatorStore : ICalculatorStore
+    public class SimpleCalculator : ICalculator
     {
         /// <summary>
         /// The current value of the calculation.
@@ -22,6 +23,17 @@ namespace CodingExercise.Services
         /// provided for the calculation.
         /// </summary>
         private bool isFirstNumber = true;
+
+
+        /// <summary>
+        /// Clears the current state of the calculator store, 
+        /// effectively beginning a new calculation.
+        /// </summary>
+        public void Clear()
+        {
+            currentValue = 0;
+            isFirstNumber = true;
+        }
 
 
         /// <summary>

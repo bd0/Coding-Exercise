@@ -1,4 +1,5 @@
 ﻿using CodingExercise.Enums;
+using CodingExercise.Services.Calculators;
 using CodingExercise.Services.Validation;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace CodingExercise.Services
 
         readonly INumberInputParser numberInputParser;
 
-        readonly ICalculatorStore calculatorStore;
+        readonly ICalculator calculatorStore;
 
         readonly IEnumerable<INumberValidator> numberValidators;
 
@@ -25,7 +26,7 @@ namespace CodingExercise.Services
             // Normally these should be provided via dependency injection, but we'll
             // ignore that for the purposes of this exercise.
             numberInputParser = new NumberInputParser();
-            calculatorStore = new SimpleCalculatorStore();
+            calculatorStore = new SimpleCalculator();
             numberValidators = new List<INumberValidator>()
             {
                 new NoNegativesNumberValidator(),
