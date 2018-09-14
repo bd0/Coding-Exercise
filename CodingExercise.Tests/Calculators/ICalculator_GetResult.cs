@@ -6,20 +6,22 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodingExercise.Tests
+namespace CodingExercise.Tests.Calculators
 {
-    [TestClass]
-    public class SimpleCalculatorStore_GetResult
+    public abstract class ICalculator_GetResult
     {
 
 
-        private ICalculator NewCalculatorStore() => new SimpleCalculator();
+        protected abstract ICalculator NewCalculator();
+
+
+        protected abstract int? GetCurrentCalculatorValue(ICalculator calculator);
 
 
         [TestMethod]
         public void ShouldReturn0ForInitialState()
         {
-            var store = NewCalculatorStore();
+            var store = NewCalculator();
 
             var result = store.GetResult();
 
@@ -33,7 +35,7 @@ namespace CodingExercise.Tests
         [DataRow(17)]
         public void ShouldReturnNumberAfterASingleDigitAdded(int value)
         {
-            var store = NewCalculatorStore();
+            var store = NewCalculator();
 
             store.CommitNumber(value, CalculatorOperation.Addition);
 
@@ -49,7 +51,7 @@ namespace CodingExercise.Tests
         [DataRow(17, 23)]
         public void ShouldReturnSumAfterTwoDigitsAdded(int value1, int value2)
         {
-            var store = NewCalculatorStore();
+            var store = NewCalculator();
 
             store.CommitNumber(value1, CalculatorOperation.Addition);
             store.CommitNumber(value2, CalculatorOperation.Addition);
@@ -72,7 +74,7 @@ namespace CodingExercise.Tests
         [DataRow(CalculatorOperation.Division, new[] { 100, 10, 2 }, 5)]
         public void ShouldReturnSumAfterTwoDigitsAdded(CalculatorOperation operation, int[] numbers, int expectedValue)
         {
-            var store = NewCalculatorStore();
+            var store = NewCalculator();
 
             foreach (var number in numbers)
             {

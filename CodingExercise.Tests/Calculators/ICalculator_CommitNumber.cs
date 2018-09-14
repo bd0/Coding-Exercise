@@ -7,14 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodingExercise.Tests
+namespace CodingExercise.Tests.Calculators
 {
-    [TestClass]
-    public class SimpleCalculatorStore_CommitNumber
+    /// <summary>
+    /// Abstract class for testing implementations of the ICalculator interface.
+    /// </summary>
+    public abstract class ICalculator_CommitNumber
     {
 
+        protected abstract ICalculator NewCalculator();
 
-        private ICalculator NewCalculatorStore() => new SimpleCalculator();
+
+        protected abstract int? GetCurrentCalculatorValue(ICalculator calculator);
 
 
         [DataTestMethod]
@@ -23,12 +27,11 @@ namespace CodingExercise.Tests
         [DataRow(17)]
         public void ShouldAddNumberToStoreState(int value)
         {
-            var store = NewCalculatorStore();
+            var store = NewCalculator();
 
             store.CommitNumber(value, Enums.CalculatorOperation.Addition);
 
-            // Must access the private state of the SimpleCalculatorStore to validate.
-            var storeCurrentValue = store.GetPrivateFieldValueInteger("currentValue");
+            var storeCurrentValue = GetCurrentCalculatorValue(store);
 
             Assert.IsTrue(storeCurrentValue.HasValue);
             Assert.AreEqual(value, storeCurrentValue);
@@ -43,12 +46,11 @@ namespace CodingExercise.Tests
         [DataRow(7, CalculatorOperation.Division)]
         public void ShouldInitializeStoreStateWithFirstValue(int value, CalculatorOperation operation)
         {
-            var store = NewCalculatorStore();
+            var store = NewCalculator();
 
             store.CommitNumber(value, operation);
 
-            // Must access the private state of the SimpleCalculatorStore to validate.
-            var storeCurrentValue = store.GetPrivateFieldValueInteger("currentValue");
+            var storeCurrentValue = GetCurrentCalculatorValue(store);
 
             Assert.IsTrue(storeCurrentValue.HasValue);
             Assert.AreEqual(value, storeCurrentValue);
@@ -67,18 +69,18 @@ namespace CodingExercise.Tests
         [DataRow(CalculatorOperation.Division, new[] { 100, 10, 2 }, 5)]
         public void ShouldUpdateTheStoreStateWithTheAppropriateValues(CalculatorOperation operation, int[] numbers, int expectedResult)
         {
-            var store = NewCalculatorStore();
+            var store = NewCalculator();
 
             foreach(var number in numbers)
             {
                 store.CommitNumber(number, operation);
             }
 
-            // Must access the private state of the SimpleCalculatorStore to validate.
-            var storeCurrentValue = store.GetPrivateFieldValueInteger("currentValue");
+            var storeCurrentValue = GetCurrentCalculatorValue(store);
 
             Assert.IsTrue(storeCurrentValue.HasValue);
             Assert.AreEqual(expectedResult, storeCurrentValue.Value);
         }
+
     }
 }
