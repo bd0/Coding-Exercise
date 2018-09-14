@@ -26,7 +26,8 @@ namespace CodingExercise.Services
             // Normally these should be provided via dependency injection, but we'll
             // ignore that for the purposes of this exercise.
             numberInputParser = new NumberInputParser();
-            calculatorStore = new SimpleCalculator();
+            //calculatorStore = new SimpleCalculator();
+            calculatorStore = new CQRSCalculator();
             numberValidators = new List<INumberValidator>()
             {
                 new NoNegativesNumberValidator(),
