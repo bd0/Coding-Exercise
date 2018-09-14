@@ -8,7 +8,7 @@ namespace CodingExercise.EventStore.Events
     /// Event representing that the calculator state was cleared
     /// so a new calculation can begin.
     /// </summary>
-    public class ClearStateEvent : IEvent
+    public class ClearCalculationEvent : IEvent
     {
 
         public Guid Id { get; } = Guid.NewGuid();
